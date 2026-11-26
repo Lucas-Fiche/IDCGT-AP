@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Pré-teste IDCGT-AP</title>
+  <link rel="stylesheet" href="../assets/css/estilo.css">
+</head>
+<body>
+  <a class="pular" href="#conteudo">Ir para o conteúdo</a>
+  <header class="topo">
+    <div class="largura">
+      <p class="instituicao">Universidade de Brasília | Mestrado Profissional em Administração Pública</p>
+      <p class="marca">IDCGT-AP <span>· Pré-teste</span></p>
+    </div>
+  </header>
+  <div id="aviso-ambiente" class="aviso-ambiente" hidden></div>
+  <main id="conteudo" class="largura" tabindex="-1">
+    <noscript><p class="alerta">Esta página precisa de JavaScript ativado para funcionar.</p></noscript>
+    <div id="app"></div>
+    <div id="anuncio" class="sr" aria-live="polite"></div>
+  </main>
+  <footer class="rodape">
+    <div class="largura">
+      <p>CAAE 01258726.4.0000.5540
+        | <a data-doc="tcle" href="../assets/documentos/pre-teste/03_TCLE_PRE_TESTE.pdf" target="_blank" rel="noopener">TCLE do pré-teste em PDF</a>
+        | <a href="../privacidade/" target="_blank" rel="noopener">Aviso de privacidade</a>
+        | <a href="../privacidade/#contatos" target="_blank" rel="noopener">Contato do pesquisador</a>
+        | CEP CHS UnB <a href="mailto:cep_chs@unb.br">cep_chs@unb.br</a></p>
+      <p class="versao">Versão do sistema: <span id="versao"></span> · Página exclusiva do pré-teste</p>
+    </div>
+  </footer>
+
+  <template id="tcle">
+    <h2>Termo de Consentimento Livre e Esclarecido</h2>
+    <p class="subtitulo">Pré teste semântico e funcional do IDCGT AP</p>
+    <p>CAAE 01258726.4.0000.5540. Parecer ético favorável: <strong data-parecer></strong>.</p>
+    <p>Você está sendo convidado a participar da pesquisa Gestão por Competências em uma Instituição Científica Tecnológica e de Inovação: Desenvolvimento evidências de validade de conteúdo e aplicação do IDCGT AP na RBCIP, de responsabilidade de João Pedro de Lima Oliveira, estudante do Mestrado Profissional em Administração Pública da Universidade de Brasília, sob orientação de Prof. Dr. Thiago Gomes Nascimento.</p>
+
+    <h3>Objetivo e procedimento</h3>
+    <p>O pré-teste verificará a clareza das instruções, dos itens, das escalas, do consentimento e do funcionamento da página. Participarão cinco profissionais de perfil semelhante ao público-alvo e externos à população da RBCIP.</p>
+    <p>Você preencherá o questionário de teste e responderá por escrito a perguntas sobre sua experiência. A atividade durará aproximadamente 20 a 30 minutos. Não haverá entrevista, gravação de voz, captura de imagem ou vídeo. Seus registros serão identificados apenas por código de P1 a P5 e não serão incorporados ao diagnóstico da RBCIP.</p>
+
+    <h3>Voluntariedade e riscos</h3>
+    <p>A participação é voluntária. Você poderá recusar, deixar perguntas sem resposta ou interromper antes do envio, sem prejuízo. Os riscos são cansaço, desconforto ao avaliar o formulário e risco residual de privacidade no ambiente virtual. Os comentários serão apresentados sem identificação e qualquer informação capaz de reconhecer pessoas ou organizações será generalizada ou omitida.</p>
+
+    <h3>Plataforma armazenamento e exclusão</h3>
+    <p>A interface será hospedada no GitHub Pages; as respostas serão transmitidas por Google Apps Script e armazenadas temporariamente em Google Sheets. Não será exigido login e o código não gravará nome, e-mail, IP, geolocalização, identificador do dispositivo ou carimbo de data e hora no banco analítico.</p>
+    <p>Os fornecedores poderão processar dados técnicos segundo suas políticas. Encerrado o pré-teste, os registros serão exportados para arquivo local protegido e apagados dos ambientes em nuvem controlados pelo pesquisador.</p>
+
+    <h3>Benefícios ressarcimento e assistência</h3>
+    <p>Não há benefício direto nem pagamento. Sua colaboração poderá tornar o instrumento mais claro e funcional. Não são previstas despesas obrigatórias; eventual gasto diretamente decorrente da participação será ressarcido mediante solicitação e comprovação. Permanecem assegurados assistência e indenização por dano diretamente relacionado à pesquisa, nos termos aplicáveis.</p>
+
+    <h3>Cópia retirada e contatos</h3>
+    <p>Antes de decidir, utilize o botão Baixar TCLE em PDF. Você poderá interromper antes do envio. Depois do envio, a ausência de identificadores poderá impedir a localização e exclusão de uma resposta específica.</p>
+    <p>Pesquisador: João Pedro de Lima Oliveira; (86) 99946-8030; jploliveira19@gmail.com e joaopedro@rbcip.org. CEP CHS UnB: cep_chs@unb.br; (61) 3107-1592.</p>
+  </template>
+
+  <script src="config.js"></script>
+  <script src="../assets/js/instrumento.js"></script>
+  <script src="../assets/js/validacao.js"></script>
+  <script src="../assets/js/cursos.js"></script>
+  <script src="../assets/js/feedback.js"></script>
+  <script src="../assets/js/pdf.js"></script>
+  <script src="../assets/js/app.js"></script>
+</body>
+</html>

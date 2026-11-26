@@ -1,0 +1,33 @@
+name: Testes
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  testes:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependências
+        run: |
+          pip install openpyxl==3.1.5
+          sudo apt-get update && sudo apt-get install -y poppler-utils
+          npm install --no-save playwright@1.63.0
+          npx playwright install --with-deps chromium
+      - name: Instrumento gerado confere com a matriz-mestre
+        run: |
+          python3 ferramentas/gerar_instrumento.py
+          git diff --exit-code -- compartilhado site/assets/js apps-script
+      - name: Testes unitários, de navegador e de exportação
+        run: npm test

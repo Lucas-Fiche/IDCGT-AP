@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self' https://script.google.com https://script.googleusercontent.com; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Pesquisa IDCGT-AP na RBCIP</title>
+  <link rel="stylesheet" href="assets/css/estilo.css">
+</head>
+<body>
+  <a class="pular" href="#conteudo">Ir para o conteúdo</a>
+  <header class="topo">
+    <div class="largura">
+      <p class="instituicao">Universidade de Brasília | Mestrado Profissional em Administração Pública</p>
+      <p class="marca">IDCGT-AP <span>· RBCIP</span></p>
+    </div>
+  </header>
+  <div id="aviso-ambiente" class="aviso-ambiente" hidden></div>
+  <main id="conteudo" class="largura" tabindex="-1">
+    <noscript><p class="alerta">Esta página precisa de JavaScript ativado para funcionar.</p></noscript>
+    <div id="app"></div>
+    <div id="anuncio" class="sr" aria-live="polite"></div>
+  </main>
+  <footer class="rodape">
+    <div class="largura">
+      <p>CAAE 01258726.4.0000.5540
+        | <a data-doc="tcle" href="assets/documentos/01_TCLE_APLICACAO_PRINCIPAL.pdf" target="_blank" rel="noopener">TCLE em PDF</a>
+        | <a href="privacidade/" target="_blank" rel="noopener">Aviso de privacidade</a>
+        | <a href="privacidade/#contatos" target="_blank" rel="noopener">Contato do pesquisador</a>
+        | CEP CHS UnB <a href="mailto:cep_chs@unb.br">cep_chs@unb.br</a></p>
+      <p class="versao">Versão do sistema: <span id="versao"></span></p>
+    </div>
+  </footer>
+
+  <template id="tcle">
+    <h2>Termo de Consentimento Livre e Esclarecido</h2>
+    <p class="subtitulo">Aplicação do IDCGT AP no setor administrativo da RBCIP</p>
+    <p>CAAE 01258726.4.0000.5540. Parecer ético favorável: <strong data-parecer></strong>.</p>
+    <p>Você está sendo convidado a participar da pesquisa Gestão por Competências em uma Instituição Científica Tecnológica e de Inovação: Desenvolvimento evidências de validade de conteúdo e aplicação do IDCGT AP na RBCIP, de responsabilidade de João Pedro de Lima Oliveira, estudante do Mestrado Profissional em Administração Pública da Universidade de Brasília, sob orientação de Prof. Dr. Thiago Gomes Nascimento.</p>
+
+    <h3>Objetivo e participação</h3>
+    <p>Esta etapa aplicará o IDCGT-AP para descrever, de forma agregada, competências transversais, competências gerenciais e práticas organizacionais percebidas entre profissionais e bolsistas ativos com atuação regular no setor administrativo da RBCIP.</p>
+    <p>Sua participação consiste em responder a um questionário eletrônico com duração aproximada de 15 a 20 minutos. As questões abertas são facultativas e nenhuma pergunta precisa ser respondida para que você possa concluir ou interromper a participação.</p>
+
+    <h3>Vínculos do pesquisador e do orientador</h3>
+    <p>O pesquisador atua como bolsista Pesquisador Sênior Nível B e auxilia a Diretoria Administrativo-Financeira no eixo de gestão de pessoas, inclusive no ingresso, controle de pessoal e preparação de folhas de pagamento. Por isso, não preparará a lista de convidados, não enviará convites ou lembretes, não acompanhará adesões e não receberá informação sobre quem participou.</p>
+    <p>O setor de Recursos Humanos realizará o envio por profissional designado que não seja o pesquisador, não esteja sob sua supervisão e não exerça chefia direta sobre os convidados. O orientador é bolsista da RBCIP, mas não exerce chefia, coordenação de projetos, avaliação, permanência ou pagamento dos potenciais participantes. Ele receberá somente material anonimizado ou agregado.</p>
+
+    <h3>Voluntariedade</h3>
+    <p>Participar é uma decisão voluntária. Você poderá recusar, deixar perguntas sem resposta ou interromper o preenchimento antes do envio, sem justificativa e sem consequência sobre vínculo, remuneração, avaliação, distribuição de atividades ou oportunidades profissionais. Chefias e direção não receberão informação sobre quem respondeu ou deixou de responder.</p>
+
+    <h3>Riscos e medidas de proteção</h3>
+    <p>Você poderá sentir cansaço, desconforto ou constrangimento ao refletir sobre seu trabalho. Como a RBCIP possui população reduzida e será identificada nominalmente, existe risco residual de reconhecimento indireto pela combinação de características ou pelo conteúdo de respostas abertas. Também há risco de falha tecnológica ou acesso indevido.</p>
+    <p>Para reduzir esses riscos, o formulário não solicitará nome, matrícula, e-mail, telefone ou código individual. Idade e tempos de atuação serão coletados por faixas; grupos com menos de cinco respostas não serão divulgados separadamente; e relatos identificáveis serão parafraseados ou omitidos. Não mencione nomes, projetos sigilosos ou fatos capazes de identificar terceiros.</p>
+
+    <h3>Plataforma e dados técnicos</h3>
+    <p>A página será hospedada no GitHub Pages. As respostas serão transmitidas por Google Apps Script e armazenadas temporariamente em Google Sheets, em conta de uso exclusivo do pesquisador, protegida por autenticação em dois fatores. Não será necessário entrar em conta Google ou GitHub.</p>
+    <p>O código da pesquisa não gravará nome, e-mail, conta de acesso, IP, geolocalização, cookies próprios, identificador persistente do dispositivo ou carimbo de data e hora no banco analítico. GitHub e Google poderão processar automaticamente dados técnicos e registros de segurança segundo suas próprias políticas. Esses registros de infraestrutura não integrarão o banco da pesquisa nem serão disponibilizados ao pesquisador pela aplicação.</p>
+    <p>Política do GitHub: <a href="https://docs.github.com/pt/site-policy/privacy-policies/github-general-privacy-statement" target="_blank" rel="noopener noreferrer">https://docs.github.com/pt/site-policy/privacy-policies/github-general-privacy-statement</a><br>
+       Política do Google: <a href="https://policies.google.com/privacy?hl=pt-BR" target="_blank" rel="noopener noreferrer">https://policies.google.com/privacy?hl=pt-BR</a></p>
+
+    <h3>Armazenamento e confidencialidade</h3>
+    <p>Encerrada a coleta, as respostas serão exportadas para arquivo local criptografado, fora de pasta sincronizada. Em seguida, serão excluídos os registros controláveis do Google Sheets, Drive e Apps Script, a lixeira será esvaziada, o endpoint será desativado e a página será despublicada.</p>
+    <p>O banco local será acessado somente pelo pesquisador. O orientador receberá dados anonimizados ou resultados agregados. Os arquivos essenciais serão mantidos por cinco anos e depois eliminados de forma segura.</p>
+
+    <h3>Identificação da RBCIP e divulgação</h3>
+    <p>A RBCIP será identificada nominalmente na dissertação e poderá ser mencionada em publicações. Os resultados serão apresentados de forma agregada e não poderão ser utilizados para ranking, sanção, remuneração, seleção, progressão, desligamento ou avaliação individual.</p>
+
+    <h3>Benefícios custos e ressarcimento</h3>
+    <p>Não há benefício individual direto garantido nem pagamento. A pesquisa poderá contribuir para identificar prioridades coletivas de desenvolvimento e aperfeiçoar o diagnóstico. Não são previstas despesas obrigatórias. Se houver gasto diretamente decorrente da participação, você poderá solicitar ressarcimento ao pesquisador, mediante comprovação. Permanecem assegurados assistência e indenização em caso de dano diretamente relacionado à pesquisa, nos termos aplicáveis.</p>
+
+    <h3>Retirada e exclusão da resposta</h3>
+    <p>Você poderá interromper sua participação antes de selecionar Enviar. Como não será coletado identificador capaz de localizar uma submissão específica, depois do envio não será possível reconhecer e excluir individualmente sua resposta. Essa limitação é informada antes da decisão de participar.</p>
+
+    <h3>Acesso aos resultados</h3>
+    <p>Após a conclusão, você receberá acesso a uma síntese executiva dos resultados agregados, encaminhada pelo setor de Recursos Humanos da RBCIP pelo mesmo canal utilizado no convite.</p>
+
+    <h3>Cópia deste termo</h3>
+    <p>Antes de registrar sua decisão, utilize o botão Baixar TCLE em PDF disponível no início da página. Você poderá salvar ou imprimir a cópia. O questionário somente será liberado depois de sua manifestação de concordância.</p>
+
+    <h3>Contatos</h3>
+    <p>Pesquisador responsável: João Pedro de Lima Oliveira. Telefone: (86) 99946-8030. E-mails: jploliveira19@gmail.com e joaopedro@rbcip.org.</p>
+    <p>Comitê de Ética em Pesquisa em Ciências Humanas e Sociais da Universidade de Brasília: cep_chs@unb.br; telefone (61) 3107-1592; atendimento de segunda a sexta-feira, das 8h às 14h.</p>
+  </template>
+
+  <script src="assets/js/config.js"></script>
+  <script src="assets/js/instrumento.js"></script>
+  <script src="assets/js/validacao.js"></script>
+  <script src="assets/js/cursos.js"></script>
+  <script src="assets/js/feedback.js"></script>
+  <script src="assets/js/pdf.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

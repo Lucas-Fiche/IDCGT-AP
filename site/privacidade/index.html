@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="referrer" content="no-referrer">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'none'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>Aviso de privacidade — IDCGT-AP</title>
+  <link rel="stylesheet" href="../assets/css/estilo.css">
+</head>
+<body>
+  <a class="pular" href="#conteudo">Ir para o conteúdo</a>
+  <header class="topo">
+    <div class="largura">
+      <p class="instituicao">Universidade de Brasília | Mestrado Profissional em Administração Pública</p>
+      <p class="marca">IDCGT-AP <span>· RBCIP</span></p>
+    </div>
+  </header>
+  <main id="conteudo" class="largura documento">
+    <h1>Aviso de Privacidade e Proteção de Dados</h1>
+    <p class="subtitulo">Aplicação eletrônica do IDCGT AP na RBCIP</p>
+    <p><a class="botao" href="../assets/documentos/02_AVISO_PRIVACIDADE_E_DADOS.pdf" download>Baixar aviso de privacidade em PDF</a></p>
+    <p>Este aviso explica o fluxo técnico dos dados. Ele complementa o TCLE e não o substitui.</p>
+
+    <h2>Dados da pesquisa</h2>
+    <table class="tabela">
+      <thead><tr><th scope="col">Categoria</th><th scope="col">Tratamento previsto</th></tr></thead>
+      <tbody>
+        <tr><th scope="row">Respostas coletadas</th><td>Respostas às 41 questões, inclusive campos abertos facultativos, e indicador técnico de conclusão sem identificador pessoal.</td></tr>
+        <tr><th scope="row">Caracterização</th><td>Faixa etária, escolaridade, grupo amplo de atividades, responsabilidade de coordenação e tempos de atuação por faixas.</td></tr>
+        <tr><th scope="row">Dados não solicitados</th><td>Nome, matrícula, e-mail, telefone, conta Google, código individual, IP, geolocalização, dispositivo, cookies próprios e carimbo de data e hora.</td></tr>
+        <tr><th scope="row">Finalidade</th><td>Produzir diagnóstico descritivo e agregado das competências e práticas organizacionais percebidas na RBCIP.</td></tr>
+      </tbody>
+    </table>
+
+    <h2>Fluxo de armazenamento</h2>
+    <ol>
+      <li>O participante acessa uma página estática hospedada no GitHub Pages.</li>
+      <li>Após o consentimento, o navegador transmite as respostas por Google Apps Script.</li>
+      <li>As respostas ficam temporariamente em Google Sheets, em conta exclusiva do pesquisador com autenticação em dois fatores.</li>
+      <li>Ao encerrar a coleta, o pesquisador exporta o banco para arquivo local criptografado fora de pasta sincronizada e verifica sua integridade.</li>
+      <li>Depois da verificação, o pesquisador exclui os arquivos e registros controláveis da nuvem, esvazia a lixeira, desativa o endpoint e despublica a página de coleta.</li>
+      <li>O arquivo essencial será mantido por cinco anos e depois eliminado de forma segura.</li>
+    </ol>
+
+    <h2>Registros dos fornecedores</h2>
+    <p>GitHub e Google poderão processar automaticamente endereço IP, data e hora, navegador, dispositivo e registros de segurança conforme suas políticas. A aplicação não programará a gravação desses dados no banco analítico e o pesquisador não os utilizará na análise.</p>
+    <ul>
+      <li>GitHub: <a href="https://docs.github.com/pt/site-policy/privacy-policies/github-general-privacy-statement" rel="noopener noreferrer">https://docs.github.com/pt/site-policy/privacy-policies/github-general-privacy-statement</a></li>
+      <li>Google: <a href="https://policies.google.com/privacy?hl=pt-BR" rel="noopener noreferrer">https://policies.google.com/privacy?hl=pt-BR</a></li>
+    </ul>
+
+    <h2>Acesso e divulgação</h2>
+    <p>Somente o pesquisador terá acesso ao banco bruto. O orientador receberá dados anonimizados ou agregados. A RBCIP receberá apenas resultados agregados. Categorias com menos de cinco participantes serão suprimidas ou combinadas e respostas abertas serão revisadas antes da divulgação.</p>
+
+    <h2>Retirada da participação</h2>
+    <p>Você poderá sair antes do envio. Depois do envio, não será possível localizar e excluir uma resposta específica, porque o banco não conterá identificador individual.</p>
+
+    <h2 id="contatos">Contatos</h2>
+    <p>Pesquisador: João Pedro de Lima Oliveira; (86) 99946-8030; jploliveira19@gmail.com e joaopedro@rbcip.org.</p>
+    <p>CEP CHS UnB: cep_chs@unb.br; (61) 3107-1592; atendimento de segunda a sexta-feira, das 8h às 14h.</p>
+  </main>
+  <footer class="rodape">
+    <div class="largura">
+      <p>CAAE 01258726.4.0000.5540
+        | <a href="../assets/documentos/01_TCLE_APLICACAO_PRINCIPAL.pdf">TCLE em PDF</a>
+        | Aviso de privacidade
+        | <a href="#contatos">Contato do pesquisador</a>
+        | CEP CHS UnB <a href="mailto:cep_chs@unb.br">cep_chs@unb.br</a></p>
+    </div>
+  </footer>
+</body>
+</html>

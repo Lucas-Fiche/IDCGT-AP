@@ -1,0 +1,14 @@
+{
+  "name": "idcgt-ap-rbcip",
+  "version": "1.0.0-dev",
+  "private": true,
+  "description": "Sistema on-line da pesquisa IDCGT-AP na RBCIP (GitHub Pages + Google Apps Script + Google Planilhas).",
+  "scripts": {
+    "gerar": "python3 ferramentas/gerar_instrumento.py",
+    "servir": "python3 -m http.server 8080 -d site",
+    "test:unitarios": "node --test testes/*.test.js",
+    "test:navegador": "node --test --test-concurrency=1 testes/e2e/*.test.js",
+    "test:exportacao": "python3 -m unittest testes/test_exportacao.py",
+    "test": "npm run test:unitarios && npm run test:navegador && npm run test:exportacao"
+  }
+}

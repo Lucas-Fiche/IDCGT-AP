@@ -1,0 +1,78 @@
+# Publicação MANUAL no GitHub Pages. Publica somente a pasta site/.
+# Não executar antes da decisão ética favorável e do Termo de Conformidade
+# Técnica assinado. A etapa é bloqueada automaticamente se config.js, parecer,
+# endpoint, versão ou PDFs públicos estiverem pendentes.
+name: Publicar no GitHub Pages
+
+on:
+  workflow_dispatch:
+    inputs:
+      etapa:
+        description: 'Etapa a publicar'
+        type: choice
+        options: [pre_teste, principal]
+        required: true
+      confirmacao:
+        description: 'Digite exatamente: DECISAO ETICA FAVORAVEL E TERMO DE CONFORMIDADE ASSINADO'
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  verificar:
+    runs-on: ubuntu-latest
+    env:
+      ETAPA: ${{ inputs.etapa }}
+      CONFIRMACAO: ${{ inputs.confirmacao }}
+    steps:
+      - name: Confirmação do responsável
+        run: |
+          if [ "$CONFIRMACAO" != "DECISAO ETICA FAVORAVEL E TERMO DE CONFORMIDADE ASSINADO" ]; then
+            echo "Confirmação ausente ou incorreta. Publicação cancelada."; exit 1
+          fi
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Dependências
+        run: |
+          pip install openpyxl==3.1.5
+          sudo apt-get update && sudo apt-get install -y poppler-utils
+          npm install --no-save playwright@1.63.0
+          npx playwright install --with-deps chromium
+      - name: Trava de liberação
+        run: python3 ferramentas/verificar_liberacao.py "$ETAPA"
+      - name: Testes
+        run: npm test
+      - name: Montar somente os arquivos públicos da etapa
+        run: |
+          rm -rf publicar && cp -r site publicar
+          if [ "$ETAPA" = "principal" ]; then
+            rm -rf publicar/pre-teste publicar/assets/documentos/pre-teste
+          fi
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: publicar
+
+  publicar:
+    needs: verificar
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <base target="_top">
+  <meta charset="utf-8">
+  <style>
+    body { font: 15px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: #1b2330; margin: 0; background: #f6f7f9; }
+    main { max-width: 70rem; margin: 0 auto; padding: 1rem 16px 3rem; }
+    h1 { font-size: 1.5rem; } h2 { font-size: 1.2rem; margin-top: 2rem; } h3 { font-size: 1rem; margin: 1.2rem 0 .3rem; }
+    .aviso { border-left: 5px solid #a35a00; background: #fff4e5; padding: .7rem 1rem; }
+    .ok { border-left-color: #1f7a45; background: #e9f6ee; }
+    .cartoes { display: flex; flex-wrap: wrap; gap: .8rem; }
+    .cartao { background: #fff; border: 1px solid #c9d0da; border-radius: 8px; padding: .7rem 1rem; min-width: 10rem; }
+    .cartao strong { display: block; font-size: 1.4rem; }
+    .rolagem { overflow-x: auto; }
+    table { border-collapse: collapse; background: #fff; margin: .3rem 0 1rem; font-size: .9rem; }
+    th, td { border: 1px solid #c9d0da; padding: .35rem .5rem; text-align: right; vertical-align: top; }
+    th:first-child, td:first-child { text-align: left; }
+    thead th { background: #e6eff8; }
+    .sup { color: #6b5200; font-weight: 600; }
+    .texto { max-width: 26rem; text-align: left; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>IDCGT-AP — Painel agregado</h1>
+  <? if (parecer && parecer.indexOf('INSERIR') === -1) { ?>
+    <p class="aviso ok">Decisão ética favorável registrada: <?= parecer ?></p>
+  <? } else { ?>
+    <p class="aviso">Nenhuma decisão ética favorável registrada (propriedade PARECER_FAVORAVEL). Utilize este painel somente com dados fictícios.</p>
+  <? } ?>
+  <p>Somente resultados agregados. Contagens de 1 a 4 aparecem como “&lt;5”, com supressão complementar. Não há linhas individuais, lista de respondentes, código de resposta, filtros, cruzamentos, escore geral, ranking ou cursos. Os blocos são apresentados separadamente; NSA (9) fica fora de mediana e IIQ; ausentes não são imputados.</p>
+
+  <? var f = function (n) { return n === null || n === undefined ? '<5' : String(n); };
+     var p = function (x) { return x === null || x === undefined ? '—' : String(x).replace('.', ',') + '%'; };
+     var d = function (x) { return x === null || x === undefined ? '—' : String(Math.round(x * 100) / 100).replace('.', ','); }; ?>
+
+  <? if (resumo.erro) { ?>
+    <p class="aviso"><?= resumo.erro ?></p>
+  <? } else { ?>
+    <h2>Fluxo de participação</h2>
+    <div class="cartoes">
+      <div class="cartao">Elegíveis (RH)<strong><?= resumo.participacao.elegiveis === null ? 'não informado' : resumo.participacao.elegiveis ?></strong></div>
+      <div class="cartao">Convidados (RH)<strong><?= resumo.participacao.convidados === null ? 'não informado' : resumo.participacao.convidados ?></strong></div>
+      <div class="cartao">Respostas recebidas<strong><?= f(resumo.participacao.recebidas) ?></strong></div>
+      <div class="cartao">Taxa de participação<strong><?= p(resumo.participacao.taxa) ?></strong></div>
+    </div>
+    <p>As respostas válidas serão definidas na depuração posterior, sem substituição de vazios por zero.</p>
+
+    <? if (resumo.suprimidoGeral) { ?>
+      <p class="aviso">Há menos de cinco submissões. Nenhum resultado é exibido.</p>
+    <? } else { ?>
+      <? for (var b = 0; b < resumo.blocos.length; b++) { var bloco = resumo.blocos[b]; ?>
+        <h2><?= bloco.nome ?></h2>
+        <? if (bloco.suprimido) { ?>
+          <p class="aviso">Bloco com menos de cinco participantes na base. Resultados suprimidos.</p>
+        <? } else { ?>
+          <p>Base do bloco: <?= f(bloco.base) ?> submissões.</p>
+          <? for (var i = 0; i < bloco.itens.length; i++) { var it = bloco.itens[i]; ?>
+            <h3><?= it.codigo ?> — <?= it.texto ?></h3>
+            <div class="rolagem"><table>
+              <thead><tr><th scope="col">Categoria</th><th scope="col">n</th><th scope="col">%</th></tr></thead>
+              <tbody>
+              <? for (var c = 0; c < it.categorias.length; c++) { var cat = it.categorias[c]; ?>
+                <tr><td><?= cat.rotulo ?></td><td class="<?= cat.n === null ? 'sup' : '' ?>"><?= f(cat.n) ?></td><td><?= p(cat.pct) ?></td></tr>
+              <? } ?>
+                <tr><td>Sem resposta (ausente)</td><td class="<?= it.ausentes.n === null ? 'sup' : '' ?>"><?= f(it.ausentes.n) ?></td><td><?= p(it.ausentes.pct) ?></td></tr>
+              </tbody>
+            </table></div>
+            <? if (it.mediana !== undefined) { ?>
+              <p>N válido (1–5): <?= f(it.nValido) ?> · Mediana: <?= d(it.mediana) ?> · Q1: <?= d(it.q1) ?> · Q3: <?= d(it.q3) ?> · IIQ: <?= d(it.iiq) ?></p>
+            <? } ?>
+          <? } ?>
+        <? } ?>
+      <? } ?>
+
+      <h2>Questões abertas (Q35–Q39)</h2>
+      <p>O texto bruto não é exibido. Temas e excertos somente após revisão manual e anonimização, fora deste painel.</p>
+      <div class="rolagem"><table>
+        <thead><tr><th scope="col">Questão</th><th scope="col">Respostas com texto</th></tr></thead>
+        <tbody>
+        <? for (var a = 0; a < resumo.abertas.length; a++) { var ab = resumo.abertas[a]; ?>
+          <tr><td class="texto"><?= ab.codigo ?> — <?= ab.texto ?></td><td class="<?= ab.comTexto === null ? 'sup' : '' ?>"><?= f(ab.comTexto) ?></td></tr>
+        <? } ?>
+        </tbody>
+      </table></div>
+    <? } ?>
+  <? } ?>
+</main>
+</body>
+</html>

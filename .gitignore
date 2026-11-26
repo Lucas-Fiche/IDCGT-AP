@@ -1,0 +1,16 @@
+# Nunca versionar dados reais, exportações, credenciais ou configurações locais.
+node_modules/
+publicar/
+__pycache__/
+*.pyc
+.clasp.json
+.clasprc.json
+.env
+*.local.*
+exportacoes/
+*.csv
+*.7z
+*.zip
+*.vc
+test-results/
+playwright-report/
