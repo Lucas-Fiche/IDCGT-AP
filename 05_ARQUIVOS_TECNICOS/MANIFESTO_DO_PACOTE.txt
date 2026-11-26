@@ -1,0 +1,46 @@
+PACOTE DOCUMENTAL DO SISTEMA IDCGT AP — RBCIP
+Versão: 19/11/2026
+CAAE: 01258726.4.0000.5540
+
+ATENÇÃO
+O desenvolvimento e os testes sem participantes podem prosseguir, mas o pré-teste,
+o recrutamento e a aplicação da pesquisa somente poderão começar após decisão ética
+favorável. Antes da publicação, substituir em todos os documentos e telas o campo
+reservado pelo número e pela data do parecer favorável.
+
+1. DOCUMENTOS PÚBLICOS NO SISTEMA
+- 01_TCLE_APLICACAO_PRINCIPAL: tela /consentimento e cópia em PDF para download.
+- 02_AVISO_PRIVACIDADE_E_DADOS: tela /privacidade e cópia em PDF para download.
+- 03_TCLE_PRE_TESTE: somente na rota restrita /pre-teste durante essa etapa.
+- 08_ROTEIRO_PRE_TESTE: perguntas e campos incorporados ao final da rota /pre-teste;
+  o PDF pode ser usado pelo pesquisador como folha de controle.
+
+2. DOCUMENTOS INTERNOS — NÃO PUBLICAR NO SITE
+- 00_MANUAL_CONTEUDO_IMPLEMENTACAO_SISTEMA: especificação de telas, rotas, dados,
+  feedback, painel, descarte e critérios de liberação.
+- 04_MODELO_FEEDBACK_INDIVIDUAL: regra e texto da devolutiva exibida somente ao
+  participante na sessão, sem envio ao banco ou ao painel.
+- 05_MODELO_DEVOLUTIVA_INSTITUCIONAL: estrutura da síntese agregada posterior.
+- 06_TERMO_CIENCIA_RESPONSAVEL_RH: assinatura da pessoa neutra responsável pelo
+  convite e pelos dois lembretes gerais.
+- 07_TERMO_CONFORMIDADE_TECNICA: checklist a ser preenchido após os testes e antes
+  da liberação da página.
+- 09_MODELOS_CONVITES_LEMBRETES_DEVOLUTIVA: textos operacionais do RH e da
+  comunicação da síntese agregada.
+
+3. ARQUIVOS TÉCNICOS
+- conteudo_sistema_idcgt_ap.json: conteúdo estruturado para implementação.
+- README_IMPLEMENTACAO.md: orientação resumida para desenvolvimento.
+
+4. ESTRUTURA DO PACOTE
+- DOCX_EDITAVEIS: versões editáveis para preenchimento e controle de versão.
+- PDF_PARA_USO: versões estáveis para publicação, assinatura ou circulação.
+- ARQUIVOS_TECNICOS: especificações destinadas ao desenvolvimento do sistema.
+
+5. REGRA DE DEVOLUTIVA
+O feedback individual é opcional, calculado e exibido localmente ao final da sessão.
+Pode sinalizar no máximo três temas por bloco a partir de Q09–Q18 e, quando Q08 for
+Sim, de Q27–Q34. Q19–Q26 descrevem práticas institucionais e não geram curso ou
+classificação individual. A RBCIP receberá somente resultados agregados, com
+supressão ou combinação de categorias com menos de cinco participantes.
+

@@ -1,0 +1,91 @@
+{
+  "versao": "1.0",
+  "data": "2026-11-19",
+  "status": "aguardando_decisao_etica_favoravel",
+  "pesquisa": {
+    "titulo": "Gestão por Competências em uma Instituição Científica Tecnológica e de Inovação: Desenvolvimento evidências de validade de conteúdo e aplicação do IDCGT AP na RBCIP",
+    "caae": "01258726.4.0000.5540",
+    "parecer_favoravel": "INSERIR_ANTES_DA_PUBLICACAO",
+    "pesquisador": "João Pedro de Lima Oliveira",
+    "orientador": "Prof. Dr. Thiago Gomes Nascimento",
+    "telefone": "(86) 99946-8030",
+    "emails": [
+      "jploliveira19@gmail.com",
+      "joaopedro@rbcip.org"
+    ],
+    "cep": {
+      "email": "cep_chs@unb.br",
+      "telefone": "(61) 3107-1592",
+      "horario": "segunda a sexta, 8h às 14h"
+    }
+  },
+  "documentos_publicos": {
+    "tcle_principal": "/assets/documentos/01_TCLE_APLICACAO_PRINCIPAL.pdf",
+    "privacidade": "/assets/documentos/02_AVISO_PRIVACIDADE_E_DADOS.pdf",
+    "tcle_pre_teste": "/assets/documentos/pre-teste/03_TCLE_PRE_TESTE.pdf",
+    "roteiro_pre_teste": "/assets/documentos/pre-teste/08_ROTEIRO_PRE_TESTE.pdf"
+  },
+  "rotas": {
+    "inicio": "/",
+    "consentimento": "/consentimento",
+    "questionario": "/questionario",
+    "revisao": "/revisao",
+    "feedback": "/feedback",
+    "conclusao": "/conclusao",
+    "privacidade": "/privacidade",
+    "pre_teste": "/pre-teste",
+    "admin": "/admin"
+  },
+  "consentimento": {
+    "baixar_pdf_antes_da_decisao": true,
+    "recusa_encerra_sem_transmissao": true,
+    "aceite_obrigatorio_para_abrir_questionario": true
+  },
+  "coleta": {
+    "respostas_obrigatorias": false,
+    "solicitar_login": false,
+    "armazenar_timestamp": false,
+    "armazenar_ip": false,
+    "armazenar_geolocalizacao": false,
+    "armazenar_dispositivo": false,
+    "armazenar_cookie_proprio": false,
+    "armazenar_identificador_persistente": false,
+    "bloco_gerencial": {
+      "exibir_somente_se": "Q08 == 1"
+    }
+  },
+  "feedback_individual": {
+    "habilitado": true,
+    "persistir_no_banco": false,
+    "blocos": {
+      "transversais": [
+        "Q09",
+        "Q18"
+      ],
+      "gerenciais": [
+        "Q27",
+        "Q34"
+      ]
+    },
+    "regra_de_sinalizacao": [
+      1,
+      2,
+      3
+    ],
+    "maximo_temas_por_bloco": 3,
+    "praticas_organizacionais_geram_feedback": false,
+    "cursos_apenas_se_conferidos": true
+  },
+  "painel": {
+    "somente_agregado": true,
+    "suprimir_n_menor_que": 5,
+    "permitir_filtro_individual": false,
+    "permitir_escore_geral": false,
+    "permitir_ranking": false,
+    "permitir_curso_automatico": false
+  },
+  "privacidade_fornecedores": {
+    "github": "https://docs.github.com/pt/site-policy/privacy-policies/github-general-privacy-statement",
+    "google": "https://policies.google.com/privacy?hl=pt-BR"
+  }
+}

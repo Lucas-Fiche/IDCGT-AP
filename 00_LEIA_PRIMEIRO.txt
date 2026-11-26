@@ -1,0 +1,44 @@
+PACOTE PARA DESENVOLVIMENTO DO SISTEMA IDCGT AP NA RBCIP
+Versão do pacote: 19/11/2026
+CAAE: 01258726.4.0000.5540
+
+COMECE PELO ARQUIVO
+01_BRIEFING_TECNICO/01_BRIEFING_TECNICO_SISTEMA_IDCGT_AP_RBCIP.pdf
+
+ORDEM DE CONSULTA
+1. Leia o briefing técnico.
+2. Consulte a matriz-mestre para a redação, os códigos e as regras das 41 questões.
+3. Use a planilha exclusiva de coleta como esquema exato do banco de produção.
+4. Consulte o manual e o JSON para implementar rotas, consentimento, feedback e painel.
+5. Utilize os PDFs públicos nas telas correspondentes.
+6. Execute o plano de testes e preencha o Termo de Conformidade Técnica antes da liberação.
+
+CONDIÇÃO ÉTICA
+O desenvolvimento e os testes internos podem utilizar apenas dados fictícios. A publicação da
+página de produção, a ativação do endpoint definitivo, o pré-teste, o recrutamento e a coleta real
+dependem de decisão ética favorável e da conclusão dos controles previstos no pacote.
+
+REGRAS QUE NÃO PODEM SER ALTERADAS SEM AUTORIZAÇÃO DO PESQUISADOR
+- Não reescrever as questões ou mudar sua ordem.
+- Não alterar os 42 cabeçalhos da planilha de coleta.
+- Não incluir nome, e-mail, matrícula, telefone, login, IP, geolocalização, dispositivo, cookie,
+  identificador persistente ou carimbo de data e hora no banco analítico.
+- Não enviar ou armazenar feedback individual no banco ou no painel.
+- Não misturar respostas do pré-teste com a coleta principal.
+- Não exibir respostas individuais ou grupos com menos de cinco participantes.
+- Não inserir credenciais ou identificadores administrativos no repositório público.
+
+ARQUIVOS PRINCIPAIS
+- 01_BRIEFING_TECNICO: especificação completa do que deve ser desenvolvido e testado.
+- 02_MATRIZ_E_BANCO: matriz-mestre e planilha exclusiva de coleta.
+- 03_DOCUMENTOS_PUBLICOS: documentos que aparecem na interface.
+- 04_DOCUMENTOS_INTERNOS: feedback, devolutiva, recrutamento, conformidade e comunicações.
+- 05_ARQUIVOS_TECNICOS: manual, JSON, README e manifesto.
+- 06_EDITAVEIS: versões Word para atualização controlada pelo pesquisador.
+
+CONTATO DO PESQUISADOR
+João Pedro de Lima Oliveira
+jploliveira19@gmail.com
+joaopedro@rbcip.org
+(86) 99946-8030
+
