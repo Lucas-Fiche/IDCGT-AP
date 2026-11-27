@@ -444,3 +444,22 @@ test('modo demonstração (desenvolvimento sem endpoint): nenhuma requisição e
   assert.deepEqual(externas, []);
   await ctx.close();
 });
+
+test('questões abertas: limite de 2.000 caracteres com contador visível', async () => {
+  const { page, ctx, envios } = await abrir();
+  await consentir(page);
+  for (let i = 0; i < 3; i++) await page.click('#btn-proximo'); // sem Q08 = 1: 4 etapas
+  assert.equal(await titulo(page), 'Questões abertas');
+  for (const c of ['Q35', 'Q36', 'Q37', 'Q38', 'Q39']) {
+    assert.equal(await page.getAttribute('#txt-' + c, 'maxlength'), '2000');
+    assert.equal((await page.textContent('#txt-' + c + '-cont')).trim(), '0 de 2000 caracteres');
+  }
+  await page.fill('#txt-Q35', 'a'.repeat(2100)); // colagem acima do limite é contida pelo campo
+  assert.equal((await page.inputValue('#txt-Q35')).length, 2000);
+  assert.equal((await page.textContent('#txt-Q35-cont')).trim(), '2000 de 2000 caracteres');
+  await page.click('#btn-proximo');
+  await page.click('#btn-enviar');
+  await page.waitForSelector('h1:has-text("Envio confirmado")');
+  assert.equal(envios[0].corpo.Q35.length, 2000);
+  await ctx.close();
+});

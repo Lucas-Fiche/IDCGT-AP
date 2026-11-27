@@ -33,7 +33,7 @@ documentacao-tecnica/     implantação, manual operacional, decisões técnicas
 ```bash
 npm run gerar      # regenera o instrumento a partir da matriz-mestre
 npm run servir     # http://localhost:8080 (modo demonstração: nada é transmitido)
-npm test           # 56 testes automatizados
+npm test           # 57 testes automatizados
 ```
 
 ## Garantias implementadas
@@ -52,15 +52,12 @@ npm test           # 56 testes automatizados
 
 Detalhes: [`documentacao-tecnica/`](documentacao-tecnica/).
 
-## Atenção: visibilidade do repositório
+## Repositórios
 
-Este repositório é **público** e contém documentos internos (`04_DOCUMENTOS_INTERNOS`, manual,
-termos, comunicações e versões editáveis), que o `00_LEIA_PRIMEIRO.txt` determina não publicar.
-O workflow de publicação envia ao Pages apenas `site/`, mas o repositório continua acessível.
-Recomenda-se ao pesquisador decidir entre: (a) tornar o repositório privado (publicar Pages a partir
-de repositório privado exige plano pago do GitHub), ou (b) manter neste repositório público apenas
-o código e os documentos públicos, transferindo os documentos internos para local privado e
-removendo-os do histórico.
+Este repositório contém documentos internos e deve permanecer **privado** (decisão do pesquisador,
+27/11/2026). Na publicação, será usado um **repositório público novo**, contendo apenas o conteúdo
+de `site/` (interface e PDFs destinados aos participantes). Até lá, o GitHub Pages, o pré-teste e a
+coleta real permanecem desativados.
 
 ## Pendências que não foram preenchidas por suposição
 

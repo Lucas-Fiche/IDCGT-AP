@@ -3,11 +3,11 @@
 | Campo | Registro |
 |---|---|
 | Versão testada | 1.0.0-dev (desenvolvimento, não liberada) |
-| Data | 26/11/2026 |
+| Data | 27/11/2026 (reexecução após as decisões do pesquisador) |
 | Dados | exclusivamente fictícios; nenhum endpoint real foi chamado |
 | Ambiente | Node 22, Chromium (Playwright 1.63), Python 3 + openpyxl, poppler (pdftotext) |
 | Comando | `npm test` |
-| Resultado | **56 testes automatizados aprovados, 0 falhas** (32 unitários/servidor simulado, 21 de navegador, 3 de exportação) |
+| Resultado | **57 testes automatizados aprovados, 0 falhas** (32 unitários/servidor simulado, 22 de navegador, 3 de exportação) |
 | Responsável técnico | **[PREENCHER]** |
 
 Os testes de navegador interceptam o endereço do Apps Script, de modo que nenhuma requisição sai da máquina.
@@ -31,7 +31,8 @@ Por isso, **os itens marcados “manual” precisam ser repetidos na implantaç�
 | Validação | Campo adicional (timestamp, e-mail, IP), campo ausente, `__proto__`, parâmetros de URL | unit “estrutura diferente…”; servidor | Aprovado |
 | Validação | Tipo incorreto (`"3"` em vez de 3, decimal, objeto) | unit; servidor | Aprovado |
 | Validação | Texto com acentos, aspas, HTML, emoji, quebra de linha, fórmula | unit; e2e (exibição escapada); servidor (apóstrofo) | Aprovado |
-| Validação | Texto acima de 5.000 caracteres e caracteres de controle | unit; servidor | Aprovado |
+| Validação | Texto acima de 2.000 caracteres e caracteres de controle | unit; servidor | Aprovado |
+| Validação | Campo aberto limitado a 2.000 caracteres, com contador “N de 2000 caracteres”; texto colado acima do limite é contido | e2e “questões abertas: limite de 2.000…” | Aprovado |
 | Envio | Duplo clique gera uma única requisição; botão desabilitado e `aria-busy` | e2e “envio único…” | Aprovado |
 | Envio | Voltar no histórico após o envio não permite reenviar | e2e “envio único…” | Aprovado |
 | Envio | Falha de rede e erro do servidor exibem a mensagem do manual; nova tentativa funciona | e2e “falha de rede…” | Aprovado |
@@ -89,3 +90,4 @@ Registrar para cada um: versão, data, responsável, cenário, resultado e evid�
 | Achado | Correção | Reteste |
 |---|---|---|
 | Navegação dependia do evento assíncrono `hashchange`; um clique rápido podia atingir a tela anterior | Navegação interna síncrona (`history.pushState` + renderização imediata) | e2e completo aprovado |
+| Limite das abertas alterado de 5.000 para 2.000 caracteres (decisão do pesquisador, 27/11/2026) | Valor único em `compartilhado/validacao.js`, copiado para interface e Apps Script; ferramenta de exportação lê o mesmo valor | Suíte completa aprovada |

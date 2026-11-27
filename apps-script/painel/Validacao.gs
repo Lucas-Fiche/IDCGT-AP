@@ -10,9 +10,9 @@
  * Não usa recursos específicos do navegador nem do Apps Script.
  */
 
-/** Limite de caracteres de cada questão aberta (decisão documentada em
- *  documentacao-tecnica/DECISOES_TECNICAS.md — confirmar com o pesquisador). */
-var IDCGT_MAX_TEXTO = 5000;
+/** Limite de caracteres de cada questão aberta (decisão confirmada pelo pesquisador em 27/11/2026;
+ *  ver documentacao-tecnica/DECISOES_TECNICAS.md, D3). */
+var IDCGT_MAX_TEXTO = 2000;
 
 /** Limite do corpo da requisição, em caracteres. */
 var IDCGT_MAX_CORPO = 120000;

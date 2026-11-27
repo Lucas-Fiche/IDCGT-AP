@@ -94,6 +94,8 @@ Atualizações de código exigem **Gerenciar implantações → Editar → Nova 
 3. No projeto do pré-teste: `PARECER_FAVORAVEL` preenchido e `COLETA_ATIVA = sim`.
 4. Publique pelo workflow **Publicar no GitHub Pages** com a etapa `pre_teste` (ver item 7).
 5. Envie aos cinco participantes externos apenas o endereço `/pre-teste/` e o código P1 a P5.
+   Não registre em nenhum lugar qual pessoa recebeu qual código: o código não deve ser ligado
+   a nome ou e-mail. O formulário não pede nenhum dos dois.
 6. Ao final: `COLETA_ATIVA = nao`, exportação e descarte conforme o manual operacional.
 
 ## 7. Produção (após pré-teste concluído e Termo de Conformidade assinado)

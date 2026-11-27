@@ -26,7 +26,15 @@ import sys
 import openpyxl
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
-MAX_TEXTO = 5000
+
+
+def ler_max_texto():
+    """Lê o limite das abertas da validação compartilhada (fonte única)."""
+    txt = (RAIZ / "compartilhado" / "validacao.js").read_text(encoding="utf-8")
+    return int(re.search(r"var IDCGT_MAX_TEXTO = (\d+);", txt).group(1))
+
+
+MAX_TEXTO = ler_max_texto()
 
 
 def carregar_instrumento():

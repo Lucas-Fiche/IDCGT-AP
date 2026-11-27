@@ -66,7 +66,7 @@ test('doPost: recusa sem gravar campos extras, valores inválidos, Q08 incoerent
   const fora = vazia(a.ctx); fora.Q09 = 7;
   const tipo = vazia(a.ctx); tipo.Q09 = '3';
   const ger = vazia(a.ctx); ger.Q08 = 0; ger.Q27 = 3;
-  const longo = vazia(a.ctx); longo.Q39 = 'x'.repeat(5001);
+  const longo = vazia(a.ctx); longo.Q39 = 'x'.repeat(2001);
   for (const corpo of [extra, fora, tipo, ger, longo, '{nao json', '', '[]', 'x'.repeat(130000)]) {
     const r = a.post(corpo);
     assert.equal(r.status, 'erro');
