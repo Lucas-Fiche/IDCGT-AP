@@ -7,7 +7,7 @@
 | Dados | exclusivamente fictícios; nenhum endpoint real foi chamado |
 | Ambiente | Node 22, Chromium (Playwright 1.63), Python 3 + openpyxl, poppler (pdftotext) |
 | Comando | `npm test` |
-| Resultado | **57 testes automatizados aprovados, 0 falhas** (32 unitários/servidor simulado, 22 de navegador, 3 de exportação) |
+| Resultado | **62 testes automatizados aprovados, 0 falhas** (36 unitários/servidor simulado, 23 de navegador, 3 de exportação) |
 | Responsável técnico | **[PREENCHER]** |
 
 Os testes de navegador interceptam o endereço do Apps Script, de modo que nenhuma requisição sai da máquina.
@@ -34,6 +34,11 @@ Por isso, **os itens marcados “manual” precisam ser repetidos na implantaç�
 | Validação | Texto acima de 2.000 caracteres e caracteres de controle | unit; servidor | Aprovado |
 | Validação | Campo aberto limitado a 2.000 caracteres, com contador “N de 2000 caracteres”; texto colado acima do limite é contido | e2e “questões abertas: limite de 2.000…” | Aprovado |
 | Envio | Duplo clique gera uma única requisição; botão desabilitado e `aria-busy` | e2e “envio único…” | Aprovado |
+| Envio | Código temporário: nova tentativa com o mesmo código responde `ok` sem nova linha; código diferente com respostas idênticas é gravado | servidor “código de envio: nova tentativa…” | Aprovado |
+| Envio | Código fica 600 s na memória temporária e nunca vai para planilha ou logs | servidor “código de envio: fica 10 minutos…” | Aprovado |
+| Envio | Código ausente, malformado, repetido no endereço ou acompanhado de outros parâmetros é recusado sem gravar | servidor “código de envio: ausente…” | Aprovado |
+| Envio | Falha de gravação não marca o código; a nova tentativa grava | servidor “código de envio: falha de gravação…” | Aprovado |
+| Envio | Navegador: somente `envio` no endereço, 32 hex, fora do corpo; reaproveitado nas novas tentativas do mesmo conteúdo; trocado se a resposta mudar ou em nova sessão | e2e “requisição…”, “falha de rede…”, “código de envio…” | Aprovado |
 | Envio | Voltar no histórico após o envio não permite reenviar | e2e “envio único…” | Aprovado |
 | Envio | Falha de rede e erro do servidor exibem a mensagem do manual; nova tentativa funciona | e2e “falha de rede…” | Aprovado |
 | Envio | Bloqueio (LockService) impede gravação sem trava | servidor “concorrência…” | Aprovado |
@@ -72,10 +77,11 @@ Registrar para cada um: versão, data, responsável, cenário, resultado e evid�
 
 1. **Apps Script de desenvolvimento**: `idcgtTesteConfiguracao` → “CONFEREM”; envio fictício pela interface
    grava uma linha na linha 2 com as 42 colunas e sem coluna extra; `{"status":"ok"}` no navegador.
-2. **Validação real**: enviar com `curl` um corpo com campo adicional e um com Q09 = 7 ao endpoint de
+2. **Validação real**: enviar com `curl` (sempre com `?envio=` e 32 caracteres hexadecimais) um corpo com campo adicional e um com Q09 = 7 ao endpoint de
    desenvolvimento → `validacao` e nenhuma linha nova.
 3. **Fórmula**: enviar `=1+1` numa aberta → célula mostra o texto `=1+1`, não `2`.
 4. **Concorrência**: dois navegadores enviando ao mesmo tempo → duas linhas distintas.
+   **Nova tentativa**: repetir com `curl` o mesmo corpo e o mesmo `?envio=` duas vezes → `ok` nas duas e uma única linha; mudar o código → segunda linha.
 5. **Logs**: Apps Script → Execuções: nenhuma linha com conteúdo de resposta.
 6. **Painel**: abrir com a conta da pesquisa (ok) e em janela anônima/outra conta (acesso negado);
    com 4 linhas fictícias → nada exibido; com 6 → agregados com “<5”.
@@ -90,4 +96,5 @@ Registrar para cada um: versão, data, responsável, cenário, resultado e evid�
 | Achado | Correção | Reteste |
 |---|---|---|
 | Navegação dependia do evento assíncrono `hashchange`; um clique rápido podia atingir a tela anterior | Navegação interna síncrona (`history.pushState` + renderização imediata) | e2e completo aprovado |
+| Proteção contra duplicidade após queda de conexão (decisão do pesquisador, 27/11/2026) | Código temporário de envio no endereço, reconhecido por 10 minutos no `CacheService`; tempo-limite de 60 s | Suíte completa aprovada (62 testes) |
 | Limite das abertas alterado de 5.000 para 2.000 caracteres (decisão do pesquisador, 27/11/2026) | Valor único em `compartilhado/validacao.js`, copiado para interface e Apps Script; ferramenta de exportação lê o mesmo valor | Suíte completa aprovada |

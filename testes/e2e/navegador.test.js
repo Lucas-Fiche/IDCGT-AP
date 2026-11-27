@@ -52,7 +52,7 @@ async function abrir(opcoes) {
   });
   await page.route('https://script.google.com/**', async (route) => {
     const req = route.request();
-    envios.push({ corpo: JSON.parse(req.postData()), headers: req.headers(), metodo: req.method() });
+    envios.push({ corpo: JSON.parse(req.postData()), headers: req.headers(), metodo: req.method(), url: new URL(req.url()) });
     const r = await o.resposta(envios[envios.length - 1].corpo, envios.length);
     if (r === 'abortar') return route.abort('failed');
     await route.fulfill({ status: r.status, contentType: 'application/json', body: r.body, headers: { 'Access-Control-Allow-Origin': '*' } });
@@ -251,6 +251,8 @@ test('falha de rede e erro do servidor: mensagem de erro, nada considerado envia
   await page.click('#btn-enviar');
   await page.waitForSelector('h1:has-text("Envio confirmado")');
   assert.equal(envios.length, 3);
+  const codigos = envios.map((e) => e.url.searchParams.get('envio'));
+  assert.ok(codigos.every((c) => c === codigos[0]), 'novas tentativas do mesmo envio reaproveitam o código');
   await ctx.close();
 });
 
@@ -268,8 +270,10 @@ test('requisição: POST text/plain, sem credenciais, sem referer e sem identifi
   const esperado = ['concluido', 'Q01', 'Q02', 'Q03', 'Q04', 'Q05', 'Q06', 'Q07', 'Q08', 'Q09', 'Q10', 'Q11', 'Q12', 'Q13', 'Q14', 'Q15', 'Q16', 'Q17', 'Q18',
     'Q19', 'Q20', 'Q21', 'Q22', 'Q23', 'Q24', 'Q25', 'Q26', 'Q27', 'Q28', 'Q29a', 'Q29b', 'Q30', 'Q31a', 'Q31b', 'Q32', 'Q33', 'Q34', 'Q35', 'Q36', 'Q37', 'Q38', 'Q39'];
   assert.deepEqual(Object.keys(e.corpo), esperado, 'somente concluido e Q01–Q39, sem timestamp ou identificador');
-  const url = new URL(ENDPOINT);
-  assert.equal(url.search, '', 'sem parâmetros na URL');
+  assert.equal(e.url.origin + e.url.pathname, ENDPOINT);
+  assert.deepEqual([...e.url.searchParams.keys()], ['envio'], 'somente o código temporário no endereço');
+  assert.match(e.url.searchParams.get('envio'), /^[0-9a-f]{32}$/);
+  assert.ok(!JSON.stringify(e.corpo).includes(e.url.searchParams.get('envio')), 'código fora do corpo');
   await ctx.close();
 });
 
@@ -462,4 +466,30 @@ test('questões abertas: limite de 2.000 caracteres com contador visível', asyn
   await page.waitForSelector('h1:has-text("Envio confirmado")');
   assert.equal(envios[0].corpo.Q35.length, 2000);
   await ctx.close();
+});
+
+test('código de envio: resposta alterada após falha gera código novo; nova sessão também', async () => {
+  const { page, ctx, envios } = await abrir({ resposta: (corpo, n) => (n === 1 ? 'abortar' : { status: 200, body: '{"status":"ok"}' }) });
+  await consentir(page);
+  await page.check('#Q01-0');
+  await ateRevisao(page);
+  await page.click('#btn-enviar');
+  await page.waitForSelector('#erro-envio:not([hidden])');
+  await page.click('button[aria-label="Alterar respostas: Perfil"]');
+  await page.check('#Q01-1');
+  await ateRevisao(page);
+  await page.click('#btn-enviar');
+  await page.waitForSelector('h1:has-text("Envio confirmado")');
+  const [c1, c2] = envios.map((e) => e.url.searchParams.get('envio'));
+  assert.notEqual(c1, c2);
+  assert.equal(envios[1].corpo.Q01, 'Homem');
+  await ctx.close();
+  const outra = await abrir();
+  await consentir(outra.page);
+  await ateRevisao(outra.page);
+  await outra.page.click('#btn-enviar');
+  await outra.page.waitForSelector('h1:has-text("Envio confirmado")');
+  const c3 = outra.envios[0].url.searchParams.get('envio');
+  assert.ok(c3 !== c1 && c3 !== c2);
+  await outra.ctx.close();
 });

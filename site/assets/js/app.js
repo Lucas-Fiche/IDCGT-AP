@@ -15,7 +15,7 @@
   var INST = window.IDCGT_INSTRUMENTO;
   var PRE = CFG.modo === 'pre_teste';
   var PLACEHOLDER_PARECER = '[INSERIR NÚMERO E DATA ANTES DA PUBLICAÇÃO]';
-  var TEMPO_LIMITE_ENVIO = 30000;
+  var TEMPO_LIMITE_ENVIO = 60000;
 
   var CONTATO = 'Dúvidas: João Pedro de Lima Oliveira; jploliveira19@gmail.com e joaopedro@rbcip.org; (86) 99946-8030.';
 
@@ -57,6 +57,8 @@
       feedback: null,
       feedbackVisivel: false,
       confirmarCancelamento: false,
+      codigoEnvio: null,   // código temporário de envio (somente memória)
+      corpoTentado: null,
       fim: anterior ? anterior.fim : null // 'recusa' | 'cancelado' | 'concluido'
     };
   }
@@ -382,15 +384,23 @@
   }
 
   // --------------------------------------------------------------- envio
-  function transmitir(corpo) {
+  /** Código temporário de envio: 128 bits aleatórios, somente em memória. */
+  function gerarCodigoEnvio() {
+    if (!window.crypto || !window.crypto.getRandomValues) return null;
+    var b = window.crypto.getRandomValues(new Uint8Array(16));
+    return Array.prototype.map.call(b, function (x) { return ('0' + x.toString(16)).slice(-2); }).join('');
+  }
+
+  function transmitir(corpoTexto, codigoEnvio) {
     if (!CFG.endpoint) {
       // Modo demonstração (somente ambiente de desenvolvimento): nada sai do dispositivo.
       if (!ambienteDeTeste()) return Promise.resolve(false);
       return new Promise(function (r) { setTimeout(function () { r(true); }, 400); });
     }
+    if (!idcgtCodigoEnvioValido(codigoEnvio)) return Promise.resolve(false);
     var ctrl = typeof AbortController === 'function' ? new AbortController() : null;
     var timer = ctrl ? setTimeout(function () { ctrl.abort(); }, TEMPO_LIMITE_ENVIO) : null;
-    return fetch(CFG.endpoint, {
+    return fetch(CFG.endpoint + '?envio=' + codigoEnvio, {
       method: 'POST',
       mode: 'cors',
       credentials: 'omit',
@@ -398,7 +408,7 @@
       redirect: 'follow',
       referrerPolicy: 'no-referrer',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(corpo),
+      body: corpoTexto,
       signal: ctrl ? ctrl.signal : undefined
     }).then(function (r) {
       if (!r.ok) return false;
@@ -420,7 +430,14 @@
 
     var corpo = idcgtMontarSubmissao(estado.respostas, CFG.modo, estado.extras);
     var valido = idcgtValidarSubmissao(corpo, CFG.modo).ok;
-    var envio = valido ? transmitir(corpo) : Promise.resolve(false);
+    var corpoTexto = JSON.stringify(corpo);
+    // O mesmo conteúdo reaproveita o código, para que o servidor reconheça uma
+    // nova tentativa após falha de conexão; conteúdo alterado recebe código novo.
+    if (!estado.codigoEnvio || estado.corpoTentado !== corpoTexto) {
+      estado.codigoEnvio = gerarCodigoEnvio();
+      estado.corpoTentado = corpoTexto;
+    }
+    var envio = valido ? transmitir(corpoTexto, estado.codigoEnvio) : Promise.resolve(false);
 
     envio.then(function (ok) {
       estado.enviando = false;
@@ -430,6 +447,8 @@
         estado.feedback = CFG.feedbackHabilitado ? idcgtCalcularFeedback(estado.respostas, window.IDCGT_CURSOS) : null;
         estado.respostas = {};
         estado.extras = {};
+        estado.codigoEnvio = null;
+        estado.corpoTentado = null;
         if (estado.feedback) ir('#/feedback'); else concluir();
         return;
       }

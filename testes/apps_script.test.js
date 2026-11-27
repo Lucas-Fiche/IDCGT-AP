@@ -2,7 +2,10 @@
 // Executa apps-script/coleta/*.gs com serviços do Google simulados.
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const crypto = require('crypto');
 const { carregar, vazia, completa } = require('./auxiliar');
+
+const novoCodigo = () => crypto.randomBytes(16).toString('hex');
 
 const ARQUIVOS = ['apps-script/coleta/Instrumento.gs', 'apps-script/coleta/Validacao.gs', 'apps-script/coleta/Codigo.gs'];
 
@@ -10,6 +13,7 @@ function ambiente(opcoes) {
   const o = Object.assign({ modo: 'principal', ativa: 'sim', parecer: 'Parecer nº 0.000.000 de 01/12/2026', nome: 'IDCGT_AP_Coleta_Principal', abas: null, travaLivre: true }, opcoes);
   const logs = [];
   const gravacoes = [];
+  const memoria = new Map(); // CacheService simulado: chave -> { valor, segundos }
   function novaAba(nome, cab) {
     const linhas = [cab.slice()];
     return {
@@ -28,6 +32,10 @@ function ambiente(opcoes) {
     console: { log: (...a) => logs.push(a.join(' ')), error: (...a) => logs.push(a.join(' ')), info: (...a) => logs.push(a.join(' ')) },
     PropertiesService: { getScriptProperties: () => ({ getProperty: (k) => ({ MODO: o.modo, PLANILHA_ID: 'ID_FICTICIO', COLETA_ATIVA: o.ativa, PARECER_FAVORAVEL: o.parecer })[k] }) },
     LockService: { getScriptLock: () => ({ tryLock: () => o.travaLivre, releaseLock: () => {} }) },
+    CacheService: { getScriptCache: () => ({
+      get: (k) => (memoria.has(k) ? memoria.get(k).valor : null),
+      put: (k, v, seg) => { memoria.set(k, { valor: v, segundos: seg }); }
+    }) },
     SpreadsheetApp: {
       openById: () => ({ getName: () => o.nome, getSheetByName: (n) => abas[n] || null }),
       flush: () => {}
@@ -40,8 +48,12 @@ function ambiente(opcoes) {
   ctx = carregar(ARQUIVOS, globais);
   const esquema = (m) => ctx.idcgtEsquema(m).campos;
   const abas = o.abas ? o.abas(novaAba, esquema) : { Base_Respostas: novaAba('Base_Respostas', esquema('principal')) };
-  const post = (corpo, parametros) => JSON.parse(ctx.doPost({ postData: { contents: typeof corpo === 'string' ? corpo : JSON.stringify(corpo) }, parameter: parametros || {} }).texto);
-  return { ctx, post, abas, gravacoes, logs };
+  // Sem parâmetros informados, cada chamada usa um código de envio novo (envio distinto).
+  const post = (corpo, parametros) => JSON.parse(ctx.doPost({
+    postData: { contents: typeof corpo === 'string' ? corpo : JSON.stringify(corpo) },
+    parameter: parametros || { envio: novoCodigo() }
+  }).texto);
+  return { ctx, post, abas, gravacoes, logs, memoria };
 }
 
 test('doPost: grava uma linha válida na segunda linha, nas 42 colunas, e responde só "ok"', () => {
@@ -139,4 +151,62 @@ test('fórmula em texto aberto é gravada como texto', () => {
   const s = vazia(a.ctx); s.Q36 = '=HYPERLINK("http://exemplo")';
   a.post(s);
   assert.equal(a.gravacoes[0].valores[38], '\'=HYPERLINK("http://exemplo")');
+});
+
+test('código de envio: nova tentativa do mesmo envio não grava outra linha', () => {
+  const a = ambiente();
+  const codigo = novoCodigo();
+  const s = completa(a.ctx, 1);
+  assert.deepEqual(a.post(s, { envio: codigo }), { status: 'ok' });
+  assert.deepEqual(a.post(s, { envio: codigo }), { status: 'ok' }, 'mesma resposta, sem revelar a repetição');
+  assert.deepEqual(a.post(s, { envio: codigo }), { status: 'ok' });
+  assert.equal(a.gravacoes.length, 1);
+  // Outra pessoa com respostas idênticas (código diferente) é gravada normalmente.
+  assert.deepEqual(a.post(s, { envio: novoCodigo() }), { status: 'ok' });
+  assert.equal(a.gravacoes.length, 2);
+});
+
+test('código de envio: fica 10 minutos na memória temporária e nunca vai para a planilha ou logs', () => {
+  const a = ambiente();
+  const codigo = novoCodigo();
+  a.post(vazia(a.ctx), { envio: codigo });
+  const [chave, item] = [...a.memoria.entries()][0];
+  assert.equal(chave, 'envio_' + codigo);
+  assert.equal(item.segundos, 600);
+  assert.ok(!JSON.stringify(a.gravacoes).includes(codigo));
+  assert.ok(!a.logs.join('\n').includes(codigo));
+});
+
+test('código de envio: ausente, malformado, repetido ou com outros parâmetros é recusado sem gravar', () => {
+  const a = ambiente();
+  const codigo = novoCodigo();
+  for (const parametros of [{}, { envio: '' }, { envio: 'abc' }, { envio: codigo.toUpperCase() }, { envio: codigo + '0' },
+    { envio: codigo, extra: '1' }, { email: 'x@y' }, { Q01: 'Mulher' }]) {
+    assert.equal(a.post(vazia(a.ctx), parametros).tipo, 'validacao', JSON.stringify(parametros));
+  }
+  const repetido = a.ctx.doPost({ postData: { contents: JSON.stringify(vazia(a.ctx)) }, parameter: { envio: codigo }, parameters: { envio: [codigo, codigo] } });
+  assert.equal(JSON.parse(repetido.texto).tipo, 'validacao');
+  assert.equal(a.gravacoes.length, 0);
+  assert.equal(a.memoria.size, 0);
+});
+
+test('código de envio: falha de gravação não marca o código, e a nova tentativa grava', () => {
+  let falhar = true;
+  const a = ambiente({ abas: (nova, esq) => {
+    const aba = nova('Base_Respostas', esq('principal'));
+    const original = aba.getRange;
+    aba.getRange = (l, c, nl, nc) => {
+      const r = original(l, c, nl, nc);
+      const setValues = r.setValues;
+      r.setValues = (v) => { if (falhar) throw new Error('falha simulada'); setValues(v); };
+      return r;
+    };
+    return { Base_Respostas: aba };
+  } });
+  const codigo = novoCodigo();
+  assert.equal(a.post(vazia(a.ctx), { envio: codigo }).tipo, 'indisponivel');
+  assert.equal(a.memoria.size, 0);
+  falhar = false;
+  assert.equal(a.post(vazia(a.ctx), { envio: codigo }).status, 'ok');
+  assert.equal(a.gravacoes.length, 1);
 });

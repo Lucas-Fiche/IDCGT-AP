@@ -33,7 +33,7 @@ documentacao-tecnica/     implantação, manual operacional, decisões técnicas
 ```bash
 npm run gerar      # regenera o instrumento a partir da matriz-mestre
 npm run servir     # http://localhost:8080 (modo demonstração: nada é transmitido)
-npm test           # 57 testes automatizados
+npm test           # 62 testes automatizados
 ```
 
 ## Garantias implementadas
@@ -43,6 +43,8 @@ npm test           # 57 testes automatizados
 - Nenhuma pergunta obrigatória; vazios permanecem vazios.
 - Q27–Q34 exibidas e enviadas somente com Q08 = 1 (cliente e servidor).
 - Revisão com voltar, alterar, deixar vazio e cancelar; envio único após confirmação; `concluido = 1`.
+- Botão travado desde o primeiro clique; código temporário de envio (fora do banco) evita linha
+  duplicada quando a conexão cai depois da gravação.
 - Sem login, cookies, armazenamento local, identificadores, data/hora, IP, geolocalização ou dispositivo.
 - Servidor aceita exatamente as 42 chaves, valida domínios, tipos, lógica de Q08 e tamanho dos textos,
   confere os cabeçalhos da planilha e usa bloqueio na gravação.

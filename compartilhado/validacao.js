@@ -14,6 +14,12 @@
  *  ver documentacao-tecnica/DECISOES_TECNICAS.md, D3). */
 var IDCGT_MAX_TEXTO = 2000;
 
+/** Código temporário de envio: 32 caracteres hexadecimais aleatórios (128 bits).
+ *  Vai somente no endereço da requisição; nunca no banco. */
+function idcgtCodigoEnvioValido(c) {
+  return typeof c === 'string' && /^[0-9a-f]{32}$/.test(c);
+}
+
 /** Limite do corpo da requisição, em caracteres. */
 var IDCGT_MAX_CORPO = 120000;
 

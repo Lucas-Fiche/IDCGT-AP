@@ -13,16 +13,37 @@
  *   COLETA_ATIVA       sim | nao        (desativação imediata do recebimento)
  *   PARECER_FAVORAVEL  número e data da decisão ética (obrigatório em pre_teste e principal)
  *
- * Contrato: POST com corpo JSON (Content-Type text/plain) contendo exatamente
- * os campos do esquema. Resposta: {"status":"ok"} ou {"status":"erro","tipo":...}.
- * Nunca retorna número de linha, identificador ou conteúdo do banco.
- * Nunca registra o conteúdo das respostas em logs.
+ * Contrato: POST para /exec?envio=<código> com corpo JSON (Content-Type text/plain)
+ * contendo exatamente os campos do esquema. Resposta: {"status":"ok"} ou
+ * {"status":"erro","tipo":...}. Nunca retorna número de linha, identificador
+ * ou conteúdo do banco. Nunca registra o conteúdo das respostas em logs.
+ *
+ * Código temporário de envio (decisão do pesquisador, 27/11/2026): 32 caracteres
+ * hexadecimais sorteados pelo navegador ao confirmar o envio, usados apenas para
+ * reconhecer uma nova tentativa do MESMO envio quando a confirmação não chegou.
+ * Fica até 10 minutos na memória temporária do Apps Script (CacheService) e
+ * nunca é gravado na planilha nem em logs.
  *
  * Arquivos do projeto: Codigo.gs, Instrumento.gs, Validacao.gs (gerados/copiados
  * do repositório) e appsscript.json.
  */
 
 var IDCGT_ESPERA_LOCK_MS = 20000;
+
+/** Tempo, em segundos, durante o qual um código de envio já gravado é reconhecido. */
+var IDCGT_VALIDADE_CODIGO_ENVIO_S = 600;
+
+/**
+ * Lê o único parâmetro de endereço permitido. Retorna o código ou null se
+ * houver qualquer outro parâmetro, repetição ou formato diferente.
+ */
+function idcgtCodigoEnvio_(e) {
+  var p = (e && e.parameter) || {};
+  var chaves = Object.keys(p);
+  if (chaves.length !== 1 || chaves[0] !== 'envio') return null;
+  if (e.parameters && e.parameters.envio && e.parameters.envio.length !== 1) return null;
+  return idcgtCodigoEnvioValido(p.envio) ? p.envio : null;
+}
 
 function doPost(e) {
   return idcgtResponder_(idcgtProcessar_(e));
@@ -55,10 +76,9 @@ function idcgtProcessar_(e) {
   if (typeof corpo !== 'string' || corpo.length === 0 || corpo.length > IDCGT_MAX_CORPO) {
     return idcgtErroValidacao_(cfg, 'tamanho_ou_corpo_invalido');
   }
-  // Parâmetros de URL não fazem parte do contrato.
-  if (e.parameter && Object.keys(e.parameter).length > 0) {
-    return idcgtErroValidacao_(cfg, 'parametros_nao_permitidos');
-  }
+  // O endereço aceita somente o código temporário de envio (?envio=<32 hex>).
+  var codigoEnvio = idcgtCodigoEnvio_(e);
+  if (!codigoEnvio) return idcgtErroValidacao_(cfg, 'codigo_envio_invalido');
 
   var dados;
   try { dados = JSON.parse(corpo); } catch (err) { return idcgtErroValidacao_(cfg, 'json_invalido'); }
@@ -70,11 +90,17 @@ function idcgtProcessar_(e) {
   var lock = LockService.getScriptLock();
   if (!lock.tryLock(IDCGT_ESPERA_LOCK_MS)) return { status: 'erro', tipo: 'indisponivel' };
   try {
+    // Nova tentativa do mesmo envio (a confirmação anterior não chegou ao
+    // navegador): responde "ok" sem gravar outra linha.
+    var memoria = CacheService.getScriptCache();
+    var chave = 'envio_' + codigoEnvio;
+    if (memoria.get(chave)) return { status: 'ok' };
     var aba = idcgtAbaVerificada_(cfg);
     if (!aba) return { status: 'erro', tipo: 'indisponivel' };
     var proxima = aba.getLastRow() + 1;
     aba.getRange(proxima, 1, 1, linha.length).setValues([linha]);
     SpreadsheetApp.flush();
+    memoria.put(chave, '1', IDCGT_VALIDADE_CODIGO_ENVIO_S);
   } catch (err) {
     // Registra somente a categoria do erro, sem conteúdo das respostas.
     console.error('IDCGT-AP: falha de gravação (' + (err && err.name ? err.name : 'Erro') + ')');
